@@ -1,6 +1,14 @@
-== Install and Configure Nginx
+--------------------------------------------------------------------------------
+What?
+--------------------------------------------------------------------------------
 
-yum install -y pcre-devel
+Demo of Rails app using Nginx HTTP Push module and Delayed Job -- but could be 
+anything.
+
+--------------------------------------------------------------------------------
+Install and configure Nginx with the HTTP Push Module
+--------------------------------------------------------------------------------
+
 wget http://pushmodule.slact.net/downloads/nginx_http_push_module-0.692.tar.gz
 tar zxf nginx_http_push_module-0.692.tar.gz 
 wget http://nginx.org/download/nginx-1.0.4.tar.gz
@@ -13,12 +21,11 @@ sudo cp config/nginx.conf /usr/local/nginx/conf/nginx.conf
 sudo /usr/local/nginx/sbin/nginx -t
 sudo /usr/local/nginx/sbin/nginx
 
-== Install Gems
+--------------------------------------------------------------------------------
+Install gems, create the database and go
+--------------------------------------------------------------------------------
 
 bundle install --binstubs
-
-== Run it
-
 bin/rake db:migrate
 bin/foreman start -p 3000 
 
