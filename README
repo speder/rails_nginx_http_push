@@ -17,8 +17,12 @@ cd nginx-1.0.4
 ./configure --add-module=../nginx_http_push_module-0.692
 make
 sudo make install
+
+--------------------------------------------------------------------------------
+Create Nginx config and start the server
+--------------------------------------------------------------------------------
 sudo cp config/nginx.conf /usr/local/nginx/conf/nginx.conf
-sudo /usr/local/nginx/sbin/nginx -t
+sudo vi /usr/local/nginx/conf/nginx.conf # edit to taste
 sudo /usr/local/nginx/sbin/nginx
 
 --------------------------------------------------------------------------------
@@ -29,4 +33,4 @@ bundle install --binstubs
 bin/rake db:migrate
 bin/foreman start -p 3000 
 
-http://localhost:8000
+http://localhost:8000 # port depends on nginx.conf
