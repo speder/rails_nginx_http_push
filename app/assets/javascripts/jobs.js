@@ -1,19 +1,23 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
+
 /**
  * @description Client interface to Nginx HTTP Push Module (NHPM) PubSub
  *  Data pushed from the Publisher is in JSON format with the following fields
  *  - String data
  *  - Boolean success
  *  - Boolean eot
- *  This format is defined in /lib/pub_sub.rb
+ *  This format is defined in app/models/pub_sub.rb
  * @param String uri : consists of
  *   - protocol://domain[:port] obtained by the controller
  *   - path from constant matching same in nginx.conf
  *   - channel created on the fly by the controller
+ *  for example:
+ *    http://localhost:8000/push/publish?channel=20110930191815780
  * @param String last_modified : used by NHPM 
  * @param String etag : used by NMPM
- * @param Function callback : function accepting single three arguments matching the published JSON
+ * @param Function callback : function accepting three arguments matching the
+ *   published JSON:
  *  - String message
  *  - Boolean error
  *  - Boolean eot
@@ -21,14 +25,14 @@
  
 function subscribe(uri, last_modified, etag, callback) {
     $.ajax({
-        'beforeSend': function(xhr) {
-            xhr.setRequestHeader("If-None-Match", etag);
-            xhr.setRequestHeader("If-Modified-Since", last_modified);
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('If-None-Match', etag);
+            xhr.setRequestHeader('If-Modified-Since', last_modified);
         },
-        url: uri,
+        url:      uri,
         dataType: 'text',
-        type: 'get',
-        cache: 'false',
+        type:     'get',
+        cache:    'false',
         success: function(json, status, xhr) {
             var data = jQuery.parseJSON(json);
             callback(data.message, data.error, data.eot);

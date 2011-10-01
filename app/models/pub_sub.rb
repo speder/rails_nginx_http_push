@@ -2,40 +2,32 @@ require 'net/http'
 require 'uri'
 
 class PubSub
-  # URIs must match those in Nginx config
+  # These URI patterns must match those in the relevant Nginx config
   PUBLISH_URI   = '%s/push/publish?channel=%s'    
   SUBSCRIBE_URI = '%s/push/subscribe?channel=%s'
 
-  # Returns Publish/Subscribe URI tuple with unique channel. The Publish URI is
-  # passed to the model, and subsequently executed via Delayed::Job, while the
-  # subscribe URI is passed to the view, and subsequently to Javascript function,
-  # This method is called by the Controller.
+  # Returns Publish/Subscribe URI tuple with unique channel.
+  # @param base_uri, a string, to build the pub and sub uris
   def self.pub_and_sub_uri(base_uri)
-    channel = generate_channel
-    
-    [PUBLISH_URI   % [base_uri, channel], SUBSCRIBE_URI % [base_uri, channel]]
-  end
-
-  def self.generate_channel
-    Time.now.strftime('%Y%m%d%H%M%S%L')
+    channel = Time.now.strftime('%Y%m%d%H%M%S%L')
+    [PUBLISH_URI % [base_uri, channel], SUBSCRIBE_URI % [base_uri, channel]]
   end
   
   attr_accessor :uri, :http
 
+  # @param uri_string, the subscribe_uri from pub_and_sub_uri()
   def initialize(uri_string)
-    @uri  = URI.parse(uri_string)
+    @uri = URI.parse(uri_string)
     @http = Net::HTTP.new(uri.host, uri.port)
   end
 
-  # Publish data in the following JSON format:
-  #   message String
-  #   error 1/0
-  #   eot 1/0
-  # This format is referenced in the Subscriber code at
-  #   app/assets/javascripts/push.js
+  # Publish data in JSON format.
+  # @param message, a string
+  # @option error, a boolean, default false
+  # @option eot, a boolean, true if end-of-transmission, default false
   def publish(message, options = {})
-    error = options[:error] || false
-    eot   = options[:eot]   || false
+    error   = options[:error] || false
+    eot     = options[:eot]   || false
     request = Net::HTTP::Post.new(uri.request_uri)
     request.body = {
       :message => message, 
@@ -43,7 +35,7 @@ class PubSub
       :eot     => eot   ? 1 : 0
     }.to_json
     request.content_type = 'text/json'
-#   request['accept']  = 'text/json'
+#   request['accept']    = 'text/json'
     http.request(request)
   end
 end

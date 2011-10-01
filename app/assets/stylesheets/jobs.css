@@ -2,3 +2,21 @@
   Place all the styles related to the matching controller here.
   They will automatically be included in application.css.
 */
+
+.success {
+  color: green;
+}
+
+.failure {
+  color: red;
+}
+
+.eot {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#output {
+  background-color: #f0f0f0;
+  overflow: auto;
+}

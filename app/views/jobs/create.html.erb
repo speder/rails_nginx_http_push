@@ -1,15 +1,13 @@
-<div id="output">
-  <ul id="messages">
-  </ul>
-</div>
+<h3><%= @subscribe_uri %></h3>
 
-<div id="ok">
+<div id="output">
+  <ul id="messages"></ul>
   <%= button_to 'OK', jobs_path, :method => :get %></p>
 </div>
 
 <script type="text/javascript">
   $(function() { 
-    $('#ok').hide();
+    $('#output input:submit').hide();
   });
   
   subscribe('<%= @subscribe_uri %>',
@@ -19,8 +17,7 @@
       var klass = error ? 'failure' : 'success';
       if (eot) {
         klass += ' eot';
-        $('#ok input:submit').val(message.toUpperCase());
-        $('#ok').show();
+        $('#output input:submit').show();
       }
       $('#messages').append('<li class="' + klass + '" >' + message + '</li>');
     }

@@ -2,10 +2,10 @@
 <%= form_tag(jobs_path) do |f| %>
   <div class="field">
     <label>Name</label><br />
-    <%= text_field_tag :name %>
+    <%= text_field_tag :name, nil, :autocomplete => 'off' %>
   </div>
   <div class="actions">
-    <%= submit_tag 'launch' %>
+    <%= submit_tag 'go' %>
   </div>
 <% end %>
 <%= link_to 'Back', jobs_path %>
