@@ -1,0 +1,8 @@
+.bundle
+db/*.sqlite3
+log/*.log
+public/assets
+.rbenv-version
+tmp/
+.sass-cache/
+vendor/bundle

@@ -1,0 +1,25 @@
+== Install and Configure Nginx
+
+yum install -y pcre-devel
+wget http://pushmodule.slact.net/downloads/nginx_http_push_module-0.692.tar.gz
+tar zxf nginx_http_push_module-0.692.tar.gz 
+wget http://nginx.org/download/nginx-1.0.4.tar.gz
+tar zxf nginx-1.0.4.tar.gz 
+cd nginx-1.0.4
+./configure --add-module=../nginx_http_push_module-0.692
+make
+sudo make install
+sudo cp config/nginx.conf /usr/local/nginx/conf/nginx.conf
+sudo /usr/local/nginx/sbin/nginx -t
+sudo /usr/local/nginx/sbin/nginx
+
+== Install Gems
+
+bundle install --binstubs
+
+== Run it
+
+bin/rake db:migrate
+bin/foreman start -p 3000 
+
+http://localhost:8000

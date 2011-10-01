@@ -1,0 +1,28 @@
+<div id="output">
+  <ul id="messages">
+  </ul>
+</div>
+
+<div id="ok">
+  <%= button_to 'OK', jobs_path, :method => :get %></p>
+</div>
+
+<script type="text/javascript">
+  $(function() { 
+    $('#ok').hide();
+  });
+  
+  subscribe('<%= @subscribe_uri %>',
+    'Thu, 1 Jan 1970 00:00:00 GMT', 
+    '0', 
+    function(message, error, eot) {
+      var klass = error ? 'failure' : 'success';
+      if (eot) {
+        klass += ' eot';
+        $('#ok input:submit').val(message.toUpperCase());
+        $('#ok').show();
+      }
+      $('#messages').append('<li class="' + klass + '" >' + message + '</li>');
+    }
+  );
+</script>
