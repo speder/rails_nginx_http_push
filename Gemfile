@@ -4,6 +4,7 @@ gem 'rails', '3.1.0'
 gem 'sqlite3'
 gem 'delayed_job'
 gem 'thin'
+gem 'delayed_job_admin'
 
 group :assets do
   gem 'execjs'

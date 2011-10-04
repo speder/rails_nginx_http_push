@@ -21,6 +21,7 @@ sudo make install
 --------------------------------------------------------------------------------
 Create Nginx config and start the server
 --------------------------------------------------------------------------------
+
 sudo cp config/nginx.conf /usr/local/nginx/conf/nginx.conf
 sudo vi /usr/local/nginx/conf/nginx.conf # edit to taste
 sudo /usr/local/nginx/sbin/nginx
