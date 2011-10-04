@@ -14,20 +14,23 @@
  *   - channel created on the fly by the controller
  *  for example:
  *    http://localhost:8000/push/publish?channel=20110930191815780
- * @param String last_modified : used by NHPM 
- * @param String etag : used by NMPM
  * @param Function callback : function accepting three arguments matching the
  *   published JSON:
  *  - String message
  *  - Boolean error
  *  - Boolean eot
+ * @param String last_modified :used internally
+ * @param String etag :used internally
  */
  
-function subscribe(uri, last_modified, etag, callback) {
+function subscribe(uri, callback, last_modified, etag) {
+    if (typeof last_modified == 'undefined') last_modified = 'Thu, 1 Jan 1970 00:00:00 GMT';
+    if (typeof etag          == 'undefined') etag          = '0';
+      
     $.ajax({
         beforeSend: function(xhr) {
-            xhr.setRequestHeader('If-None-Match', etag);
             xhr.setRequestHeader('If-Modified-Since', last_modified);
+            xhr.setRequestHeader('If-None-Match',     etag);
         },
         url:      uri,
         dataType: 'text',
@@ -39,7 +42,7 @@ function subscribe(uri, last_modified, etag, callback) {
             if (!data.eot) { // initiate another long poll
                 etag          = xhr.getResponseHeader('Etag');
                 last_modified = xhr.getResponseHeader('Last-Modified');
-                subscribe(uri, last_modified, etag, callback);
+                subscribe(uri, callback, last_modified, etag);
             }
         },
         error: function(xhr, status, error) {

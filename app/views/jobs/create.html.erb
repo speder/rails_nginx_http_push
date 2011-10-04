@@ -2,24 +2,20 @@
 
 <div id="output">
   <ul id="messages"></ul>
-  <%= button_to 'OK', jobs_path, :method => :get %></p>
+  <div id="dismiss"><%= button_to 'ok', jobs_path, :method => :get %></div>
 </div>
 
 <script type="text/javascript">
   $(function() { 
-    $('#output input:submit').hide();
+    $('#dismiss').hide();
   });
   
-  subscribe('<%= @subscribe_uri %>',
-    'Thu, 1 Jan 1970 00:00:00 GMT', 
-    '0', 
-    function(message, error, eot) {
-      var klass = error ? 'failure' : 'success';
-      if (eot) {
-        klass += ' eot';
-        $('#output input:submit').show();
-      }
-      $('#messages').append('<li class="' + klass + '" >' + message + '</li>');
+  subscribe('<%= @subscribe_uri %>', function(message, error, eot) {
+    var klass = error ? 'failure' : 'success';
+    if (eot) {
+      klass += ' eot';
+      $('#dismiss').show();
     }
-  );
+    $('#messages').append('<li class="' + klass + '" >' + message + '</li>');
+  });
 </script>
